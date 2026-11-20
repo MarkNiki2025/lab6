@@ -123,9 +123,46 @@ void quickSort(Edge *edges, int low, int high) {
     }
 }
 
-void algorithmKraskala(int *wMatrix){
-    
+void algorithmKraskala(Edge *edges, int numOfPoints, int numOfEdges,int *result) {
+    int parent[numOfPoints];
+    int edgesByAl[numOfPoints - 1];
+    int count = 0;
+
+    for (int i = 0; i < numOfPoints; i++) {
+        parent[i] = i;
+    }
+
+    for (int i = 0; i < numOfEdges && count < numOfPoints - 1; i++) {
+        int a = edges[i].from;
+        int b = edges[i].to;
+
+        int rootA = a;
+        while (parent[rootA] != rootA) {
+            rootA = parent[rootA];
+        }
+
+        int rootB = b;
+        while (parent[rootB] != rootB) {
+            rootB = parent[rootB];
+        }
+
+        if (rootA == rootB) continue;
+
+        parent[rootB] = rootA;
+
+        edgesByAl[count] = i;
+        count++;
+    }
+    if (count != numOfPoints - 1) {
+        printf("Graph is not connected!\n");
+        return;
+    }
+    for(int i = 0; i < numOfPoints - 1; i++){
+        result[i] = edgesByAl[i];
+    }
+        
 }
+
 int main() {
     int *wMatrix = calloc(NUMOFDEFAULTPOINTS * NUMOFDEFAULTPOINTS, sizeof(int));
     int choice = 0;
@@ -180,11 +217,15 @@ int main() {
     Edge *edges = calloc(edgesCount,sizeof(Edge));
     checkMem(edges);
     matrixToEdges(wMatrix, edges, numOfPoints);
-    printEdges(edges,edgesCount);
-
     quickSort(edges, 0, edgesCount - 1);
-    printEdges(edges, edgesCount);
+    int *indexesForTree = calloc(numOfPoints-1,sizeof(int));
+    Edge *edgesForTree = calloc(numOfPoints-1,sizeof(Edge));
     
+    algorithmKraskala(edges,numOfPoints,edgesCount,indexesForTree);
+    for (int i = 0; i < numOfPoints-1; i++){
+        edgesForTree[i] = edges[indexesForTree[i]];
+    }
+    printEdges(edgesForTree,numOfPoints-1);
     free(edges);
     free(wMatrix);
     return 0;
