@@ -123,7 +123,7 @@ void quickSort(Edge *edges, int low, int high) {
     }
 }
 
-void algorithmKraskala(Edge *edges, int numOfPoints, int numOfEdges,int *result) {
+int algorithmKraskala(Edge *edges, int numOfPoints, int numOfEdges,int *result) {
     int parent[numOfPoints];
     int edgesByAl[numOfPoints - 1];
     int count = 0;
@@ -155,12 +155,12 @@ void algorithmKraskala(Edge *edges, int numOfPoints, int numOfEdges,int *result)
     }
     if (count != numOfPoints - 1) {
         printf("Graph is not connected!\n");
-        return;
+        return 0;
     }
     for(int i = 0; i < numOfPoints - 1; i++){
         result[i] = edgesByAl[i];
     }
-        
+    return 1;
 }
 
 int main() {
@@ -221,14 +221,19 @@ int main() {
     int *indexesForTree = calloc(numOfPoints-1,sizeof(int));
     Edge *edgesForTree = calloc(numOfPoints-1,sizeof(Edge));
     
-    algorithmKraskala(edges,numOfPoints,edgesCount,indexesForTree);
-    for (int i = 0; i < numOfPoints-1; i++){
-        edgesForTree[i] = edges[indexesForTree[i]];
-        printf("%d) \n",i+1);
-        printEdges(edgesForTree,i+1);
-        printf("\n");
+    if(algorithmKraskala(edges,numOfPoints,edgesCount,indexesForTree)){
+        for (int i = 0; i < numOfPoints-1; i++){
+            edgesForTree[i] = edges[indexesForTree[i]];
+            printf("%d) \n",i+1);
+            printEdges(edgesForTree,i+1);
+            printf("\n");
+        }
+        printEdges(edgesForTree,numOfPoints-1);
+    }else{
+        printf("We have mistake");
     }
-    printEdges(edgesForTree,numOfPoints-1);
+    free(indexesForTree);
+    free(edgesForTree);
     free(edges);
     free(wMatrix);
     return 0;
