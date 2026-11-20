@@ -224,6 +224,9 @@ int main() {
     algorithmKraskala(edges,numOfPoints,edgesCount,indexesForTree);
     for (int i = 0; i < numOfPoints-1; i++){
         edgesForTree[i] = edges[indexesForTree[i]];
+        printf("%d) \n",i+1);
+        printEdges(edgesForTree,i+1);
+        printf("\n");
     }
     printEdges(edgesForTree,numOfPoints-1);
     free(edges);
