@@ -230,7 +230,7 @@ int main() {
         }
         printEdges(edgesForTree,numOfPoints-1);
     }else{
-        printf("We have mistake");
+        printf("We have mist8ake");
     }
     free(indexesForTree);
     free(edgesForTree);
